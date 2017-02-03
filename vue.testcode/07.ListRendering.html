@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>List Rendering</title>
+</head>
+<body>
+<div id="app1">
+    <ol>
+        <!--item in items-->
+        <!--(item,index) in items-->
+        <!--v-for块拥有对父作用域的完全访问，表现在可以获取parentMsg-->
+        <li v-for="(item,index) in items">{{parentMsg}}-{{index}}-{{item.text}}</li>
+    </ol>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var vm1=new Vue({
+        el: "#app1",
+        data: {
+            parentMsg: "parent",
+            items: [
+                {text: "apple"},
+                {text: "bnana"}
+            ]
+        }
+    })
+</script>
+</body>
+</html>

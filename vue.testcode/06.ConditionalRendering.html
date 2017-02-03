@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Conditional Rendering</title>
+</head>
+<body>
+<div id="app1">
+    <h2 v-if="ok">Yes</h2>
+    <h3 v-else>No</h3>
+</div>
+<!--增加key属性来控制元素的可重用-->
+<div id="app2">
+    <template v-if="loginType === 'username' ">
+        <label>UserName</label>
+        <input placeholder="username input" key="username-input">
+    </template>
+    <template v-else>
+        <label>Email</label>
+        <input placeholder="email input" key="email-input">
+    </template>
+    <button v-on:click="func">toggle login type</button>
+</div>
+<!--v-show-->
+<div id="app3">
+    <p v-show="ok">Yes</p>
+    <p v-show="notok">No</p>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    //ok定义在data中，为true时显示h1，否则显示h2
+    var vm1=new Vue({
+        el: "#app1",
+        data: {
+            ok: true
+        }
+    });
+    //增加key属性来控制元素的可重用
+    var vm2=new Vue({
+        el: "#app2",
+        data: {
+            loginType: "username"
+        },
+        methods:{
+            func: function () {
+                if(this.loginType==="username"){
+                    this.loginType="email";
+                } else{
+                    this.loginType="username";
+                }
+            }
+        }
+    });
+    //v-show
+    var vm3=new Vue({
+        el: "#app3",
+        data: {
+            ok: true,
+            notok: false
+        }
+    })
+</script>
+</body>
+</html>

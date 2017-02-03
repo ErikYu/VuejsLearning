@@ -16,6 +16,10 @@
         <!--asd-->
     </div>
 </div>
+<!--绑定内联样式-->
+<div id="app3">
+    <p v-bind:style="styleObj">ijnbgr</p>
+</div>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script>
     //给v-bind:class传入一个对象
@@ -41,6 +45,16 @@
             }
         }
     });
+    //绑定内联样式，传入对象
+    var vm3=new Vue({
+        el: "#app3",
+        data: {
+            styleObj: {
+                "font-size": "20px", //或者使用驼峰命名，否则加引号
+                color: "red"
+            }
+        }
+    })
 </script>
 </body>
 </html>

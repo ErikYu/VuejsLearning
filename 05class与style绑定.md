@@ -30,3 +30,30 @@ data: {
 渲染结果为`<div class="active error">asd</div>`
 数组语法中也可以使用对象语法
 ##### 用在组件上
+声明组件
+````javascript
+Vue.component("my-component",{
+    template: "<p class='foo bar'>Hi</p>"
+})
+````
+使用的时候添加其他class
+````html
+<my-component v-bind:class="{avtive: isActive}"></my-component>
+````
+当isActive为true时，HTML将被渲染为`<p class="foo bar active"></p>`
+### 绑定内联样式
+##### 对象语法
+将对象传给v-bind:style属性
+`<div v-bind:style="styleObj"></div>`
+````javascript
+data: {
+    styleObj: {
+        'font-size': '16px',
+        color: 'red'
+    }
+}
+````
+##### 数组语法
+将多个对象放入一个数组中应用在一个元素上；
+##### 自动增加前缀
+当 v-bind:style 使用需要特定前缀的 CSS 属性时，如 transform ，Vue.js 会自动侦测并添加相应的前缀。
