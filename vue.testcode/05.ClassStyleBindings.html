@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Class and Style Bindings</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div id="app1">
+    <div class="alert" v-bind:class="{ 'alert-success': isSuccess, 'alert-info': isInfo }" role="alert">for god sake</div>
+</div>
+<div id="app2">
+    <div class="alert" v-bind:class="classObj" role="alert">
+        <input type="text" v-model="Boolean" />
+        <!--asd-->
+    </div>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    //给v-bind:class传入一个对象
+    var vm1=new Vue({
+        el: "#app1",
+        data:{
+            isSuccess: true,
+            isInfo: true
+        }
+    });
+    //直接绑定数据中的对象，并使用计算属性
+    var vm2=new Vue({
+        el: "#app2",
+        data: {
+            Boolean: false
+        },
+        computed: {
+            classObj: function () {
+                return{
+                    'alert-success': true,
+                    'alert-info': this.Boolean //只要输入字符串就为true，改变class属性
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>

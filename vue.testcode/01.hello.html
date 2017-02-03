@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="hello" v-bind:title="message">
+    <!--声明式渲染-->
+    <div>
+        {{ name+index }}
+    </div>
+    <!--条件语句-->
+    <div v-if="show">
+        show or hidden
+    </div>
+    <!--循环: v-for=""-->
+    <ol>
+        <li v-for="item in list">
+            {{ item.text }}
+        </li>
+    </ol>
+    <!--
+    处理用户输入
+    包括按键绑定: v-on:click="func";func定义在methods对象中
+    表单绑定: v-model="message"
+    -->
+    <div>
+        <p>{{message2}}</p>
+        <input type="button" value="Reverse" v-on:click="reverse" />
+        <p>hello, {{message3}}</p>
+        <input type="text" v-model="message3" />
+    </div>
+</div>
+<!--用组件的方式构建一个应用-->
+<div id="app">
+    <ol>
+        <todo-li v-for="item in list" v-bind:todo="item"></todo-li>
+    </ol>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var newVue=new Vue({
+        el: "#hello",
+        data: {
+            name: "Vue",
+            index: 2,
+            message: new Date(),
+            show: true,
+            list:[
+                {text: "vue"},
+                {text: "Angular"}
+            ],
+            message2: "hello world!",
+            message3: "form bind"
+        },
+        methods: {
+            reverse: function (event) {
+                this.message2=this.message2.split("").reverse().join("");
+            }
+        }
+    });
+//  组件化
+//  创建一个叫做todo-li的组件
+    Vue.component("todo-li",{
+        props: ["todo"],
+        template: "<li>{{todo.text}}</li>"
+    });
+    var app=new Vue({
+        el: "#app",
+        data: {
+            list: [
+                {text: "potato"},
+                {text: "tomato"},
+                {text: "apple"}
+            ]
+        }
+    })
+</script>
+</body>
+</html>

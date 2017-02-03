@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Computed Properties and Watchers</title>
+</head>
+<body>
+<!--基础实例-->
+<div id="app1">
+    <input type="text" v-model="message" />
+    <p>{{message}}</p>
+    <p>{{reverseMessage}}</p>
+</div>
+<div id="app2">
+    <p>{{fullName}}</p>
+</div>
+<div id="app3">
+    <p>{{fullName}}</p>
+</div>
+<div id="app4">
+    <p>{{firstName}}</p>
+    <p>{{lastName}}</p>
+    <p>{{fullName}}</p>
+</div>
+<div id="watch-example">
+    <p>
+        Ask a question:
+        <input type="text" v-model="question"/>
+    </p>
+    <p>{{answer}}</p>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://unpkg.com/lodash@4.13.1/lodash.min.js"></script>
+<script>
+    var vm1=new Vue({
+        el: "#app1",
+        data: {
+            message: "hello"
+        },
+        computed: {
+            //a computed getter
+            reverseMessage: function () {
+                return this.message.split("").reverse().join("");
+            }
+        }
+    });
+    //采用watch实现
+    var vm2=new Vue({
+        el: "#app2",
+        data: {
+            firstName: "yz",
+            lastName: "yu",
+            fullName: "none"
+        },
+        //如果firstName发生变化，就会执行相应的函数
+        watch: {
+            firstName: function (val) {
+                this.fullName=val+" "+this.lastName;
+            },
+            lastName: function (val) {
+                this.fullName=this.firstName+" "+val;
+            }
+        }
+    });
+    //computed实现
+    var vm3=new Vue({
+        el: "#app3",
+        data: {
+            firstName: "nan",
+            lastName: "huang"
+        },
+        computed:{
+            fullName: function () {
+                return this.firstName+" "+this.lastName;
+            }
+        }
+    });
+    //getter和setter
+    var vm4=new Vue({
+        el: "#app4",
+        data: {
+            firstName: "John",
+            lastName: "Waston"
+        },
+        computed:{
+            fullName: {
+                get: function () {
+                    return this.firstName+" "+this.lastName;
+                },
+                set: function (val) {
+                    this.firstName=val.split(" ")[0];
+                    this.lastName=val.split(" ")[1];
+                }
+            }
+        }
+    });
+    //watcher
+    var vm5=new Vue({
+        el: "#watch-example",
+        data: {
+            question: "",
+            answer: "I cannot give you an answer until you ask a question!"
+        },
+        watch: {
+            question: function (val) {
+                this.answer="waiting```";
+                this.getAnswer();
+            }
+        },
+        methods: {
+            getAnswer: _.debounce(
+                function () {
+                    var vm=this;
+                    if(this.question.indexOf("?")===-1){
+                        vm.answer="vQuestions usually contain a question mark. ;-)";
+                        return;
+                    }
+                    vm.answer="thinking";
+                    axios.get('https://yesno.wtf/api')
+                    .then(function (response) {
+                        vm.answer = _.capitalize(response.data.answer)
+                    })
+                    .catch(function (error) {
+                        vm.answer = 'Error! Could not reach the API. ' + error
+                    })
+                },500
+            )
+        }
+    })
+
+</script>
+</body>
+</html>

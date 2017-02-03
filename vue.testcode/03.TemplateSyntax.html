@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Template Syntax</title>
+</head>
+<body>
+<div id="app1">
+    <p>this will change, {{message1}}</p>
+    <!--通过v-once指令实现执行一次性插值而不更新-->
+    <p v-once>this will never change, {{message1}}</p>
+    <input type="text" v-model="message1" />
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var app1=new Vue({
+        el: "#app1",
+        data: {
+            message1: "hell"
+        }
+    })
+</script>
+</body>
+</html>
