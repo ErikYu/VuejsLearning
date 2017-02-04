@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Form Input Bindings</title>
+</head>
+<body>
+<div id="app1">
+    <input type="text" v-model="message" placeholder="none"/>
+    <p>{{message}}</p>
+</div>
+<!--复选框的v-model-->
+<div id="app2">
+    <input id="check" type="checkbox" v-model="is"/>
+    <label for="check">{{is}}</label>
+</div>
+<!--多个勾选框，绑定到一个数组-->
+<div id="app3">
+    <input type="checkbox" value="jack" id="jack" v-model="checkedName" />
+    <label for="jack">Jack</label>
+    <input type="checkbox" value="michele" id="michele" v-model="checkedName" />
+    <label for="michele">michele</label>
+    <input type="checkbox" value="issue" id="issue" v-model="checkedName" />
+    <label for="issue">issue</label>
+    <p>{{checkedName}}</p>
+</div>
+<!--选择列表-->
+<div id="app4">
+    <select v-model="selected" multiple>
+        <option value="r">A</option>
+        <option>B</option>
+        <option>C</option>
+    </select>
+    <p>selected:{{selected}}</p>
+</div>
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var app1=new Vue({
+        el: "#app1",
+        data: {
+            message:""
+        }
+    });
+    var app2=new Vue({
+        el: "#app2",
+        data: {
+            is: false
+        }
+    });
+    var app3=new Vue({
+        el: "#app3",
+        data: {
+            checkedName:[]
+        }
+    });
+    var app4=new Vue({
+        el: "#app4",
+        data: {
+            selected:""
+        }
+    });
+</script>
+</body>
+</html>

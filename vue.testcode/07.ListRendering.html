@@ -13,6 +13,58 @@
         <li v-for="(item,index) in items">{{parentMsg}}-{{index}}-{{item.text}}</li>
     </ol>
 </div>
+<!--带有v-for的template标签-->
+<!--同时渲染多个元素块-->
+<div id="app2">
+    <ul>
+        <template v-for="item in items">
+            <li>{{item.message}}</li>
+            <li class="devider">hrhrhr</li>
+        </template>
+    </ul>
+</div>
+<!--对象迭代，渲染对象内容-->
+<!--可以包括key，value，index-->
+<div id="app3">
+    <ul>
+        <li v-for="(value,key,index) in object">
+            {{index}}-{{key}}:{{value}}
+        </li>
+    </ul>
+</div>
+<!--整数迭代-->
+<div id="app4">
+    <span v-for="n in 10">{{n}}</span>
+</div>
+<!--一个简单的todo-list-->
+<!--未组件化-->
+<h3>Todo List</h3>
+<div id="todo-list">
+    <input type="text" placeholder="add one todo" v-model="addNewTodo" v-on:keyup.enter="addFunc" />
+    <ul>
+        <li v-for="(item,index) in items">
+            {{item}}
+            <button v-on:click="items.splice(index,1)">X</button>
+        </li>
+    </ul>
+</div>
+<!--一个简单的todo-list-->
+<!--组件化-->
+<h3>Todo List version 2</h3>
+<div id="todos">
+    <input type="text" placeholder="add one todo" v-model="addNewTodo" v-on:keyup.enter="addFunc" />
+    <ul>
+        <todo-li v-for="(item,index) in items" v-bind:title="item" v-on:remove="items.splice(index,1)"></todo-li>
+    </ul>
+</div>
+<!--返回数组中偶数数组-->
+<!--不改变原始数组-->
+<div id="even">
+    <ul>
+        <li v-for="n in evenNumbers">{{n}}</li>
+    </ul>
+</div>
+
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script>
     var vm1=new Vue({
@@ -23,6 +75,88 @@
                 {text: "apple"},
                 {text: "bnana"}
             ]
+        }
+    });
+    var vm2=new Vue({
+        el: "#app2",
+        data: {
+            items: [
+                {message: "Angular"},
+                {message: "Vue"},
+                {message: "React"}
+            ]
+        }
+    });
+    var vm3=new Vue({
+        el: "#app3",
+        data: {
+            object: {
+                age: 30,
+                sex: "male",
+                married: true
+            }
+        }
+    });
+    var vm4=new Vue({
+        el: "#app4"
+    });
+    var vmTodo=new Vue({
+        el: "#todo-list",
+        data: {
+            addNewTodo:"",
+            items:[
+                "eat",
+                "sleep",
+                "code"
+            ]
+        },
+        methods: {
+            addFunc: function () {
+                this.items.push(this.addNewTodo);
+                this.addNewTodo="";
+            }
+        }
+    });
+    // 创建todo-li的自定义组件
+    Vue.component("todo-li", {
+        // 传入一个title属性，title绑定为item，因为item不能直接传入组件内
+        // 组件拥有自身独立的作用域
+        props: ["title"],
+        // 注意引号
+        // $emit("event")，event在自定义元素中给了一个splice的方法，这里是一个trigger这个方法
+        template: '<li>{{title}}<button v-on:click="$emit(\'remove\')">X</button></li>'
+    })
+    var vmTodo2=new Vue({
+        el: "#todos",
+        data: {
+            addNewTodo:"",
+            items:[
+                "eat",
+                "sleep",
+                "code"
+            ]
+        },
+        methods: {
+            addFunc: function () {
+                this.items.push(this.addNewTodo);
+                this.addNewTodo="";
+            }
+        }
+    });
+    var even=new Vue({
+        el: "#even",
+        data: {
+            numbers: [1,2,3,4,5]
+        },
+        computed:{
+            evenNumbers: function () {
+                // filter的功能描述
+                // 对数组中的每个元素都会执行回调函数
+                // 创建一个新的数组，数组元素是回调函数返回true的原数组元素
+                return this.numbers.filter(function (val) {
+                    return val%2===0
+                })
+            }
         }
     })
 </script>

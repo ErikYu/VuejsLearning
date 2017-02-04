@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event Handling</title>
+</head>
+<body>
+<div id="app1">
+    <button v-on:click="addOne">CLICK</button>
+    <p>{{counter}}</p>
+</div>
+<!--.stop修饰符阻止事件冒泡-->
+<div id="app2" v-on:click="log(3)">
+    <div v-on:click="log(2)">
+        <div v-on:click.stop="log(1)">Press</div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    var app1=new Vue({
+        el: "#app1",
+        data: {
+            counter: 0
+        },
+        methods: {
+            addOne: function () {
+                this.counter+=1;
+            }
+        }
+    })
+    var app2=new Vue({
+        el: "#app2",
+        methods: {
+            log: function (val) {
+                console.log(val)
+            }
+        }
+
+    })
+</script>
+</body>
+</html>

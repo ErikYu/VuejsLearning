@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Components</title>
+</head>
+<body>
+<!--局部注册-->
+<div id="app1">
+    <my-component></my-component>
+    <my-component></my-component>
+</div>
+
+<script src="https://unpkg.com/vue/dist/vue.js"></script>
+<script>
+    //定义一个组件
+    var Child={
+        template: "<p>this is local</p>"
+    };
+    var app1=new Vue({
+        el: "#app1",
+        // 将组件放在#app1中
+        components: {
+            "my-component": Child
+        }
+    })
+</script>
+</body>
+</html>
