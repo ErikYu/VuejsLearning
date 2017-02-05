@@ -10,10 +10,41 @@
     <my-component></my-component>
     <my-component></my-component>
 </div>
-
+<!--子组件中传入data选项-->
+<div id="app2">
+    <simple-counter></simple-counter>
+    <simple-counter></simple-counter>
+    <simple-counter></simple-counter>
+</div>
+<!--使用props传递数据-->
+<div id="app3">
+    <child message="hello"></child>
+</div>
+<!--动态prop-->
+<h3>dy</h3>
+<div id="app4">
+    <input type="text" v-model="inputMsg"/>
+    <my-input v-bind:message="inputMsg"></my-input>
+    <my-input message="123"></my-input>
+</div>
+<!--prop验证-->
+<!--props传入的不是数组，而是对象-->
+<div id="app5">
+    <input type="text" v-model="content" />
+    <app5-child v-bind:message="content"></app5-child>
+</div>
+<!--使用v-on绑定自定义事件-->
+<div id="user-defined-event">
+    <p>{{ total }}</p>
+    <!--v-on监视的时间不能是驼峰命名？！！-->
+    <!--父组件在使用子组件的地方使用v-on监视子组件出发的事件-->
+    <button-counter v-on:selfadd="addTotal"></button-counter>
+    <button-counter v-on:selfadd="addTotal"></button-counter>
+</div>
+<!--使用自定义事件的表单输入组件-->
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script>
-    //定义一个组件
+    // 定义一个组件
     var Child={
         template: "<p>this is local</p>"
     };
@@ -22,6 +53,81 @@
         // 将组件放在#app1中
         components: {
             "my-component": Child
+        }
+    });
+    // 创建一个simple-counter的子组件
+    Vue.component("simple-counter",{
+        template: "<button v-on:click='counter+=1'>{{counter}}</button>",
+        data: function () {
+            return {counter: 0};
+        }
+    });
+    var app2=new Vue({
+        el: "#app2"
+    });
+    // 创建一个child的全局子组件
+    Vue.component("child", {
+        props: ["message"],
+        template: "<strong>{{message}}</strong>"
+    });
+    var app3=new Vue({
+        el: "#app3"
+    });
+    // 创建子组件，传入props：message
+    // 元素中message绑定到表单的v-model
+    Vue.component("my-input",{
+        props: ["message"],
+        template: "<p>{{message}}</p>"
+    });
+    var app4=new Vue({
+        el: "#app4",
+        data: {
+            inputMsg: ""
+        }
+    });
+    // 定义一个局部组件
+    var app5Child={
+        props: {
+            message: [Number,String]
+        },
+        template: "<strong>{{message}}</strong>"
+    };
+    var app5=new Vue({
+        el: "#app5",
+        components: {
+            "app5-child": app5Child
+        },
+        data: {
+            content: ""
+        }
+    });
+    // 使用v-on绑定自定义事件
+    // 新建一个子组件
+    // 这里selfadd改为selfAdd就无法实现total增加
+    Vue.component("button-counter", {
+        template: '<button v-on:click="selfadd">{{num}}</button>',
+        data: function () {
+            return {
+                num: 0
+            };
+        },
+        methods: {
+            selfadd: function () {
+                this.num+=1;
+                // 触发selfadd，使父组件v-on监视到
+                this.$emit("selfadd");
+            }
+        },
+    });
+    var userDefinedEvent=new Vue({
+        el: "#user-defined-event",
+        data: {
+            total: 0
+        },
+        methods: {
+            addTotal: function () {
+                this.total += 1;
+            }
         }
     })
 </script>
