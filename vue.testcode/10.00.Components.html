@@ -36,12 +36,15 @@
 <!--使用v-on绑定自定义事件-->
 <div id="user-defined-event">
     <p>{{ total }}</p>
-    <!--v-on监视的时间不能是驼峰命名？！！-->
+    <!--v-on监视的事件不能是驼峰命名？！！-->
     <!--父组件在使用子组件的地方使用v-on监视子组件出发的事件-->
     <button-counter v-on:selfadd="addTotal"></button-counter>
     <button-counter v-on:selfadd="addTotal"></button-counter>
 </div>
 <!--使用自定义事件的表单输入组件-->
+<div id="currency">
+    <currency-input v-model="price"></currency-input>
+</div>
 <script src="https://unpkg.com/vue/dist/vue.js"></script>
 <script>
     // 定义一个组件
@@ -128,6 +131,35 @@
             addTotal: function () {
                 this.total += 1;
             }
+        }
+    })
+    //currency-input
+    Vue.component('currency-input',{
+        template:'\
+        <span>\
+            $\
+            <input\
+            ref="input1"\
+            v-bind:value="value"\
+            v-on:input="update($event.target.value)"\
+            >\
+        </span>\
+        ',
+        props:['value'],
+        methods:{
+            update: function (val) {
+                var formmatvalue=val.trim().slice(0, val.indexOf('.')+3);
+                if(formmatvalue !== val){
+                    this.$refs.input1.value=formmatvalue;
+                }
+                this.$emit('input', Number(formmatvalue))
+            }
+        }
+    })
+    var currency=new Vue({
+        el: "#currency",
+        data: {
+            price: 0
         }
     })
 </script>
